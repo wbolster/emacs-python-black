@@ -44,23 +44,22 @@
 ;;;###autoload (autoload 'python-black-region "python-black" nil t)
 ;;;###autoload (autoload 'python-black-on-save-mode "python-black" nil t)
 (reformatter-define python-black
-  :program (python-black--command)
-  :args (python-black--make-args)
+  :program (python-black--command beg end)
+  :args (python-black--make-args beg end)
   :lighter " BlackFMT"
   :group 'python-black)
 
-(defun python-black--command ()
-  "Helper to decide which command to run."
-  (if (python-black--partially-formatting?)
-      (progn
-        (unless (executable-find python-black-macchiato-command)
-          (error "Partial formatting requires ‘%s’, but it is not installed"
-                 python-black-macchiato-command))
-        python-black-macchiato-command)
-    python-black-command))
+(defun python-black--command (beg end)
+  "Helper to decide which command to run for span BEG to END."
+  (if (python-black--whole-buffer-p beg end)
+      python-black-command
+    (unless (executable-find python-black-macchiato-command)
+      (error "Partial formatting requires ‘%s’, but it is not installed"
+             python-black-macchiato-command))
+    python-black-macchiato-command))
 
-(defun python-black--make-args ()
-  "Helper to build the argument list for black."
+(defun python-black--make-args (beg end)
+  "Helper to build the argument list for black for span BEG to END."
   (append
    python-black--base-args
    (-when-let* ((file-name (buffer-file-name))
@@ -68,20 +67,13 @@
                 (is-pyi-file (string-equal "pyi" extension)))
      '("--pyi"))
    python-black-extra-args
-   (unless (python-black--partially-formatting?)
+   (when (python-black--whole-buffer-p beg end)
      '("-"))))
 
-(defun python-black--partially-formatting? ()
-  "Return whether this is a partial formatting operation."
-  ;; Inspecting a variable like this-command is not useful here,
-  ;; since that won't work for the on save hook, and will also fail if
-  ;; the function is called indirectly (e.g. by another user-defined
-  ;; command). Instead, inspect the current call stack to figure out
-  ;; whether python-black-buffer occurs in it.
-  (-none? (lambda (frame)
-            (let ((func (nth 1 frame)))
-              (eq func 'python-black-buffer)))
-          (backtrace-frames)))
+(defun python-black--whole-buffer-p (beg end)
+  "Return whether BEG and END span the whole buffer."
+  (and (= (point-min) beg)
+       (= (point-max) end)))
 
 (provide 'python-black)
 ;;; python-black.el ends here
