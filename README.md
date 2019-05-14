@@ -39,7 +39,7 @@ To configure `black` itself, use an [external configuration file](https://black.
 License
 -------
 
-3-clause BSD. Copyright © 2019 wouter bolsterlee.
+BSD-3-clause. Copyright © 2019 wouter bolsterlee.
 
 Credits
 -------
