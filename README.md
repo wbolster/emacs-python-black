@@ -22,8 +22,20 @@ Usage
 Use one of these commands via `M-x` or bind them to a key:
 
 - `python-black-buffer`
-- `python-black-region` (requires `black-macchiato`)
+
+  Reformat the current buffer.
+
+- `python-black-region`
+
+  Reformat the current region. (Requires `black-macchiato`.)
+
+- `python-black-statement`
+
+  Reformat the current statement. (Requires `black-macchiato`.)
+
 - `python-black-on-save-mode`
+
+  Automatically reformat the buffer on save.
 
 Configuration
 -------------

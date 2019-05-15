@@ -15,6 +15,7 @@
 ;;; Code:
 
 (require 'dash)
+(require 'python)
 (require 'reformatter)
 
 (defgroup python-black nil
@@ -48,6 +49,21 @@
   :args (python-black--make-args beg end)
   :lighter " BlackFMT"
   :group 'python-black)
+
+;;;###autoload
+(defun python-black-statement (&optional display-errors)
+  "Reformats the current statement.
+
+When called interactively with a prefix argument, or when
+DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
+  (interactive "p")
+  (let ((beg (save-excursion
+               (python-nav-beginning-of-statement)
+               (line-beginning-position)))
+        (end (save-excursion
+               (python-nav-end-of-statement)
+               (1+ (line-end-position)))))
+    (python-black-region beg end display-errors)))
 
 (defun python-black--command (beg end)
   "Helper to decide which command to run for span BEG to END."
