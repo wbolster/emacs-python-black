@@ -57,13 +57,14 @@
 When called interactively with a prefix argument, or when
 DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
   (interactive "p")
-  (let ((beg (save-excursion
-               (python-nav-beginning-of-statement)
-               (line-beginning-position)))
-        (end (save-excursion
-               (python-nav-end-of-statement)
-               (1+ (line-end-position)))))
-    (python-black-region beg end display-errors)))
+  (-when-let* ((beg (save-excursion
+                      (python-nav-beginning-of-statement)
+                      (line-beginning-position)))
+               (end (save-excursion
+                      (python-nav-end-of-statement)
+                      (line-end-position)))
+               (non-empty? (not (= beg end))))
+    (python-black-region beg (1+ end) display-errors)))
 
 (defun python-black--command (beg end)
   "Helper to decide which command to run for span BEG to END."
