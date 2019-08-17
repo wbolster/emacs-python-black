@@ -21,6 +21,10 @@ Usage
 
 Use one of these commands via `M-x` or bind them to a key:
 
+- `python-black-on-save-mode`
+
+  Automatically reformat the buffer on save.
+
 - `python-black-buffer`
 
   Reformat the current buffer.
@@ -33,9 +37,9 @@ Use one of these commands via `M-x` or bind them to a key:
 
   Reformat the current statement. (Requires `black-macchiato`.)
 
-- `python-black-on-save-mode`
+- `python-black-partial-dwim`
 
-  Automatically reformat the buffer on save.
+  Reformat the active region or the current statement, depending on whether the region is currently active. (Requires `black-macchiato`.)
 
 Configuration
 -------------

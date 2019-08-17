@@ -66,6 +66,20 @@ DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
                (non-empty? (not (= beg end))))
     (python-black-region beg (1+ end) display-errors)))
 
+;;;###autoload
+(defun python-black-partial-dwim (&optional display-errors)
+  "Reformats the active region or the current statement.
+
+This runs ‘python-black-region’ or ‘python-black-statement’ depending
+on whether the region is currently active.
+
+When called interactively with a prefix argument, or when
+DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
+  (interactive "p")
+  (if (region-active-p)
+      (python-black-region (region-beginning) (region-end) display-errors)
+    (python-black-statement display-errors)))
+
 (defun python-black--command (beg end)
   "Helper to decide which command to run for span BEG to END."
   (if (python-black--whole-buffer-p beg end)
