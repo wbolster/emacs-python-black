@@ -64,7 +64,7 @@ DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
                       (python-nav-end-of-statement)
                       (line-end-position)))
                (non-empty? (not (= beg end))))
-    (python-black-region beg (1+ end) display-errors)))
+    (python-black-region beg (min (point-max) (1+ end)) display-errors)))
 
 ;;;###autoload
 (defun python-black-partial-dwim (&optional display-errors)
