@@ -17,6 +17,7 @@
 (require 'dash)
 (require 'python)
 (require 'reformatter)
+(require 'rx)
 
 (defgroup python-black nil
   "Python reformatting using black."
@@ -41,6 +42,9 @@
   :group 'python-black
   :type '(repeat string))
 
+(defconst python-black--config-file "pyproject.toml")
+(defconst python-black--config-file-marker-regex (rx bol "[tool.black]" eol))
+
 ;;;###autoload (autoload 'python-black-buffer "python-black" nil t)
 ;;;###autoload (autoload 'python-black-region "python-black" nil t)
 ;;;###autoload (autoload 'python-black-on-save-mode "python-black" nil t)
@@ -49,6 +53,15 @@
   :args (python-black--make-args beg end)
   :lighter " BlackFMT"
   :group 'python-black)
+
+;;;###autoload
+(defun python-black-on-save-mode-enable-dwim ()
+  "Enable ‘python-black-on-save-mode’ if this project is using Black.
+
+The heuristic used looks for ‘[tool.black]’ in a ‘pyproject.toml’ file."
+  (interactive)
+  (when (python-black--buffer-in-blackened-project-p)
+    (python-black-on-save-mode)))
 
 ;;;###autoload
 (defun python-black-statement (&optional display-errors)
@@ -105,6 +118,17 @@ DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
   "Return whether BEG and END span the whole buffer."
   (and (= (point-min) beg)
        (= (point-max) end)))
+
+(defun python-black--buffer-in-blackened-project-p ()
+  "Check whether the current buffer resides in a project that is using Black."
+  (-when-let* ((file-name (buffer-file-name))
+               (project-directory (locate-dominating-file file-name python-black--config-file))
+               (config-file (concat project-directory python-black--config-file))
+               (config-file-contains-marker
+                (with-temp-buffer
+                  (insert-file-contents-literally config-file)
+                  (re-search-forward python-black--config-file-marker-regex nil t 1))))
+    t))
 
 (provide 'python-black)
 ;;; python-black.el ends here

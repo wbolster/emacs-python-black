@@ -13,7 +13,8 @@ Install the [python-black Melpa package](https://melpa.org/#/python-black) using
 ``` elisp
 (use-package python-black
   :demand t
-  :after python)
+  :after python
+  :hook (python-mode . python-black-on-save-mode-enable-dwim))
 ```
 
 Usage
@@ -23,7 +24,11 @@ Use one of these commands via `M-x` or bind them to a key:
 
 - `python-black-on-save-mode`
 
-  Automatically reformat the buffer on save.
+  Minor mode to automatically reformat the buffer on save.
+
+- `python-black-on-save-mode-enable-dwim`
+
+  Enable `python-black-on-save-mode` if this project is using Black. (Useful in hooks; see example above.)
 
 - `python-black-buffer`
 
