@@ -57,6 +57,18 @@ This package deliberately has minimal configuration. Use `M-x customize-group RE
 
 To configure `black` itself, use an [external configuration file](https://black.readthedocs.io/en/stable/pyproject_toml.html) for your project, which has the benefits that it can be per-project, and works outside Emacs as well.
 
+History
+-------
+
+- 1.1.0 (2021-05-11)
+
+  - Add `python-black-on-save-mode-enable-dwim` for use in hooks
+  - Don't break when there's no newline at the end of the buffer (#4)
+
+- 1.0.0 (2019-08-17)
+
+  - Initial release
+
 License
 -------
 
