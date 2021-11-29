@@ -55,7 +55,7 @@ This package deliberately has minimal configuration. Use `M-x customize-group RE
 - `python-black-macchiato-command`
 - `python-black-extra-args`
 
-To configure `black` itself, use an [external configuration file](https://black.readthedocs.io/en/stable/pyproject_toml.html) for your project, which has the benefits that it can be per-project, and works outside Emacs as well.
+To configure `black` itself, use an [external configuration file](https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file) for your project, which has the benefits that it can be per-project, and works outside Emacs as well.
 
 History
 -------
