@@ -56,11 +56,11 @@
 
 ;;;###autoload
 (defun python-black-on-save-mode-enable-dwim ()
-  "Enable ‘python-black-on-save-mode’ if this project is using Black.
-
-The heuristic used looks for ‘[tool.black]’ in a ‘pyproject.toml’ file."
+  "Enable ‘python-black-on-save-mode’ if appropriate."
   (interactive)
-  (when (python-black--buffer-in-blackened-project-p)
+  (-when-let* ((file-name (buffer-file-name))
+               (uses-black? (python-black--in-blackened-project-p file-name))
+               (not-third-party? (not (python-black--third-party-file-p file-name))))
     (python-black-on-save-mode)))
 
 ;;;###autoload
@@ -119,15 +119,21 @@ DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
   (and (= (point-min) beg)
        (= (point-max) end)))
 
-(defun python-black--buffer-in-blackened-project-p ()
-  "Check whether the current buffer resides in a project that is using Black."
-  (-when-let* ((file-name (buffer-file-name))
-               (project-directory (locate-dominating-file file-name python-black--config-file))
+(defun python-black--in-blackened-project-p (file-name)
+  "Determine whether FILE-NAME resides in a project that is using Black.
+
+This looks for ‘[tool.black]’ in a ‘pyproject.toml’ file."
+  (-when-let* ((project-directory (locate-dominating-file file-name python-black--config-file))
                (config-file (concat project-directory python-black--config-file))
                (config-file-contains-marker
                 (with-temp-buffer
                   (insert-file-contents-literally config-file)
                   (re-search-forward python-black--config-file-marker-regex nil t 1))))
+    t))
+
+(defun python-black--third-party-file-p (file-name)
+  "Determine whether FILE-NAME is likely a third party file."
+  (-when-let* ((lib-python-dir (locate-dominating-file file-name "site-packages")))
     t))
 
 (provide 'python-black)

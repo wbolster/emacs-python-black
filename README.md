@@ -60,6 +60,11 @@ To configure `black` itself, use an [external configuration file](https://black.
 History
 -------
 
+- next release (already available via melpa unstable)
+
+  - `python-black-on-save-mode-enable-dwim` now ignores files in
+    `site-packages/` directories
+
 - 1.1.0 (2021-05-11)
 
   - Add `python-black-on-save-mode-enable-dwim` for use in hooks
