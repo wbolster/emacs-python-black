@@ -93,6 +93,17 @@ DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
       (python-black-region (region-beginning) (region-end) display-errors)
     (python-black-statement display-errors)))
 
+;;;###autoload
+(defun python-black-org-mode-block (&optional display-errors)
+  "Reformats the current org-mode source block."
+  (interactive)
+  (unless (org-in-block-p '("src" "example"))
+    (user-error "Not in a source block"))
+  (save-mark-and-excursion
+    (pcase (org-src--contents-area (org-element-at-point))
+      (`(,beg ,end ,_)
+       (python-black-region beg (- end 1) display-errors)))))
+
 (defun python-black--command (beg end)
   "Helper to decide which command to run for span BEG to END."
   (if (python-black--whole-buffer-p beg end)
