@@ -66,6 +66,8 @@ History
 
 - next release (already available via melpa unstable)
 
+  - new `python-black-org-mode-block` function to format an `org-mode` block (#12)
+
   - `python-black-on-save-mode-enable-dwim` now ignores files in
     `site-packages/` directories
 
