@@ -46,6 +46,10 @@ Use one of these commands via `M-x` or bind them to a key:
 
   Reformat the active region or the current statement, depending on whether the region is currently active. (Requires `black-macchiato`.)
 
+- `python-black-org-mode-block`
+
+  Reformat the current `org-mode` Python example or source code block. (Requires `black-macchiato`.)
+
 Configuration
 -------------
 
