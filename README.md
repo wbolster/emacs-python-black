@@ -64,6 +64,10 @@ To configure `black` itself, use an [external configuration file](https://black.
 History
 -------
 
+- next release (already available via melpa unstable)
+
+  - …
+
 - 1.2.0 (2022-11-03)
 
   - new `python-black-org-mode-block` function to format an `org-mode` block (#12)
