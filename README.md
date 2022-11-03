@@ -48,7 +48,7 @@ Use one of these commands via `M-x` or bind them to a key:
 
 - `python-black-org-mode-block`
 
-  Reformat the current `org-mode` python example or source code block.
+  Reformat the current `org-mode` Python example or source code block. (Requires `black-macchiato`.)
 
 Configuration
 -------------
