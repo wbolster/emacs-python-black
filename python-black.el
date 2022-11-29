@@ -117,6 +117,8 @@ DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
   "Helper to build the argument list for black for span BEG to END."
   (append
    python-black--base-args
+   (-when-let* ((file-name (buffer-file-name)))
+     `("--stdin-filename" ,file-name))
    (-when-let* ((file-name (buffer-file-name))
                 (extension (file-name-extension file-name))
                 (is-pyi-file (string-equal "pyi" extension)))
