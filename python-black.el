@@ -96,6 +96,8 @@ DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
 (declare-function org-in-block-p "org" (names))
 (declare-function org-src--contents-area "org-src" (datum))
 (declare-function org-element-at-point "org-element" (&optional pom cached-only))
+(declare-function org-unescape-code-in-region "org-src" (beg end))
+(declare-function org-escape-code-in-region "org-src" (beg end))
 
 ;;;###autoload
 (defun python-black-org-mode-block (&optional display-errors)
@@ -108,7 +110,18 @@ DISPLAY-ERRORS, shows a buffer if the formatting fails."
   (save-mark-and-excursion
     (pcase (org-src--contents-area (org-element-at-point))
       (`(,beg ,end ,_)
-       (python-black-region beg (- end 1) display-errors)))))
+       (let ((buf (current-buffer))
+             (end (- end 1)))
+         (with-temp-buffer
+           (let ((temp-buf (current-buffer)))
+             (insert-buffer-substring-no-properties buf beg end)
+             (org-unescape-code-in-region (point-min) (point-max))
+             (python-black-region (point-min) (point-max) display-errors)
+             (org-escape-code-in-region (point-min) (point-max))
+             (with-current-buffer buf
+               (save-restriction
+                 (narrow-to-region beg end)
+                 (replace-buffer-contents temp-buf 0.1))))))))))
 
 (defun python-black--command (beg end)
   "Helper to decide which command to run for span BEG to END."
