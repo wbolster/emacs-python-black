@@ -64,9 +64,10 @@ To configure `black` itself, use an [external configuration file](https://black.
 History
 -------
 
-- next release (already available via melpa unstable)
+- 1.3.0 (2026-07-06)
 
-  - …
+  - Properly escape code in org src blocks (#18)
+  -  Fix byte compiler warnings (#16)
 
 - 1.2.0 (2022-11-03)
 
